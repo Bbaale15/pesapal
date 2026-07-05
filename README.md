@@ -24,10 +24,29 @@ Built and maintained by [Toolbox Technologies](https://toolbox.ug).
 
 ## Installation
 
-1. Download `pesapal.ocmod.zip` from the [Releases](../../releases) page (or build it — see below).
-2. In the OpenCart admin, go to **Extensions → Installer** and upload the zip.
-3. Go to **Extensions → Extensions → Payments**, find **Pesapal Payment Gateway** and click **Install** (green `+`). This creates the transaction table.
-4. Click **Edit** to configure.
+### 1. Build the zip
+
+Clone this repository and build the installable package:
+
+```bash
+git clone https://github.com/toolbox-technologies/pesapal-opencart.git
+cd pesapal-opencart
+zip -r pesapal.ocmod.zip install.json extension/pesapal/ --exclude "*.DS_Store"
+```
+
+On Windows (PowerShell):
+
+```powershell
+Compress-Archive -Path install.json, extension -DestinationPath pesapal.ocmod.zip
+```
+
+> The zip must contain `install.json` at its root and the `extension/pesapal/` directory — OpenCart's installer relies on this layout.
+
+### 2. Install in OpenCart
+
+1. In the OpenCart admin, go to **Extensions → Installer** and upload `pesapal.ocmod.zip`.
+2. Go to **Extensions → Extensions → Payments**, find **Pesapal Payment Gateway** and click **Install** (green `+`). This creates the transaction table.
+3. Click **Edit** to configure.
 
 ## Configuration
 
@@ -85,12 +104,6 @@ extension/pesapal/
     ├── Client.php                   # cURL HTTP client
     ├── Auth.php                     # Bearer token requests
     └── Order.php                    # IPN registration, order submit, status query
-```
-
-## Building the zip
-
-```bash
-zip -r pesapal.ocmod.zip install.json extension/pesapal/ --exclude "*.DS_Store"
 ```
 
 ## Troubleshooting
