@@ -1,0 +1,41 @@
+<div id="pesapal-payment">
+  <p><strong>{{ text_title }}</strong></p>
+  <p>{{ text_redirect }}</p>
+  <div class="text-end">
+    <button type="button" id="button-pesapal-confirm" class="btn btn-primary">
+      {{ button_confirm }}
+    </button>
+  </div>
+</div>
+
+<script type="text/javascript">
+$('#button-pesapal-confirm').on('click', function() {
+  var btn = $(this);
+
+  btn.prop('disabled', true).append(' <i class="fa-solid fa-spinner fa-spin"></i>');
+
+  $.ajax({
+    url: 'index.php?route=extension/pesapal/payment/pesapal.confirm&language={{ language }}',
+    type: 'post',
+    dataType: 'json',
+    success: function(json) {
+      if (json['redirect']) {
+        location = json['redirect'];
+      }
+      if (json['error']) {
+        $('#alert').prepend(
+          '<div class="alert alert-danger alert-dismissible">' +
+          '<i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] +
+          ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+          '</div>'
+        );
+        btn.prop('disabled', false).find('i.fa-spinner').remove();
+      }
+    },
+    error: function(xhr, status, error) {
+      console.error('Pesapal confirm error:', error);
+      btn.prop('disabled', false).find('i.fa-spinner').remove();
+    }
+  });
+});
+</script>

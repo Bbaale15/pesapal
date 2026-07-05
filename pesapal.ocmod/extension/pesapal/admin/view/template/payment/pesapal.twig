@@ -1,0 +1,172 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-pesapal" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div id="alert"></div>
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-pesapal" action="{{ save }}" method="post" data-oc-toggle="ajax">
+
+          {# ── API Credentials ─────────────────────────────────────── #}
+          <fieldset>
+            <legend>API Credentials</legend>
+
+            <div class="row mb-3 required">
+              <label class="col-sm-3 col-form-label" for="input-consumer-key">{{ entry_consumer_key }}</label>
+              <div class="col-sm-9">
+                <input type="text" name="payment_pesapal_consumer_key" value="{{ payment_pesapal_consumer_key }}" id="input-consumer-key" class="form-control" />
+                <div class="form-text">{{ help_consumer_key }}</div>
+              </div>
+            </div>
+
+            <div class="row mb-3 required">
+              <label class="col-sm-3 col-form-label" for="input-consumer-secret">{{ entry_consumer_secret }}</label>
+              <div class="col-sm-9">
+                <input type="password" name="payment_pesapal_consumer_secret" value="{{ payment_pesapal_consumer_secret }}" id="input-consumer-secret" class="form-control" autocomplete="new-password" />
+                <div class="form-text">{{ help_consumer_secret }}</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-environment">{{ entry_environment }}</label>
+              <div class="col-sm-9">
+                <select name="payment_pesapal_environment" id="input-environment" class="form-select">
+                  <option value="sandbox"{% if payment_pesapal_environment == 'sandbox' %} selected{% endif %}>{{ text_sandbox }}</option>
+                  <option value="live"{% if payment_pesapal_environment == 'live' %} selected{% endif %}>{{ text_live }}</option>
+                </select>
+                <div class="form-text">{{ help_environment }}</div>
+              </div>
+            </div>
+          </fieldset>
+
+          {# ── URL Reference ────────────────────────────────────────── #}
+          <fieldset class="mt-3">
+            <legend>URL Reference</legend>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label">{{ entry_ipn_url }}</label>
+              <div class="col-sm-9">
+                <input type="text" value="{{ ipn_url }}" class="form-control" readonly onclick="this.select()" />
+                <div class="form-text">{{ help_ipn_url }}</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label">{{ entry_callback_url }}</label>
+              <div class="col-sm-9">
+                <input type="text" value="{{ callback_url }}" class="form-control" readonly onclick="this.select()" />
+                <div class="form-text">{{ help_callback_url }}</div>
+              </div>
+            </div>
+          </fieldset>
+
+          {# ── Order Status Mapping ─────────────────────────────────── #}
+          <fieldset class="mt-3">
+            <legend>{{ tab_general }}</legend>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-pending-status">{{ entry_pending_status }}</label>
+              <div class="col-sm-9">
+                <select name="payment_pesapal_pending_status_id" id="input-pending-status" class="form-select">
+                  {% for order_status in order_statuses %}
+                    <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_pesapal_pending_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-processing-status">{{ entry_processing_status }}</label>
+              <div class="col-sm-9">
+                <select name="payment_pesapal_processing_status_id" id="input-processing-status" class="form-select">
+                  {% for order_status in order_statuses %}
+                    <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_pesapal_processing_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-failed-status">{{ entry_failed_status }}</label>
+              <div class="col-sm-9">
+                <select name="payment_pesapal_failed_status_id" id="input-failed-status" class="form-select">
+                  {% for order_status in order_statuses %}
+                    <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_pesapal_failed_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-cancelled-status">{{ entry_cancelled_status }}</label>
+              <div class="col-sm-9">
+                <select name="payment_pesapal_cancelled_status_id" id="input-cancelled-status" class="form-select">
+                  {% for order_status in order_statuses %}
+                    <option value="{{ order_status.order_status_id }}"{% if order_status.order_status_id == payment_pesapal_cancelled_status_id %} selected{% endif %}>{{ order_status.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-geo-zone">{{ entry_geo_zone }}</label>
+              <div class="col-sm-9">
+                <select name="payment_pesapal_geo_zone_id" id="input-geo-zone" class="form-select">
+                  <option value="0">{{ text_all_zones }}</option>
+                  {% for geo_zone in geo_zones %}
+                    <option value="{{ geo_zone.geo_zone_id }}"{% if geo_zone.geo_zone_id == payment_pesapal_geo_zone_id %} selected{% endif %}>{{ geo_zone.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-debug">{{ entry_debug }}</label>
+              <div class="col-sm-9">
+                <div class="form-check form-switch form-switch-lg">
+                  <input type="hidden" name="payment_pesapal_debug" value="0" />
+                  <input type="checkbox" name="payment_pesapal_debug" value="1" id="input-debug" class="form-check-input"{% if payment_pesapal_debug %} checked{% endif %} />
+                </div>
+                <div class="form-text">{{ help_debug }}</div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-status">{{ entry_status }}</label>
+              <div class="col-sm-9">
+                <div class="form-check form-switch form-switch-lg">
+                  <input type="hidden" name="payment_pesapal_status" value="0" />
+                  <input type="checkbox" name="payment_pesapal_status" value="1" id="input-status" class="form-check-input"{% if payment_pesapal_status %} checked{% endif %} />
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <label class="col-sm-3 col-form-label" for="input-sort-order">{{ entry_sort_order }}</label>
+              <div class="col-sm-9">
+                <input type="text" name="payment_pesapal_sort_order" value="{{ payment_pesapal_sort_order }}" id="input-sort-order" class="form-control" style="width:100px" />
+              </div>
+            </div>
+          </fieldset>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}
