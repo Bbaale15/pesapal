@@ -2,7 +2,7 @@
 
 A payment extension that integrates [Pesapal API 3.0](https://developer.pesapal.com/) with OpenCart 4.x, supporting Mobile Money, Visa/Mastercard and Bank Transfer payments in UGX, USD and other Pesapal-supported currencies.
 
-Built and maintained by [Toolbox Technologies](https://toolbox.ug).
+Built and maintained by [Emmy Bbaale](https://www.linkedin.com/in/emmy-bbaale/).
 
 ## Features
 
